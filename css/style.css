@@ -1,0 +1,67 @@
+.ambiente {
+    display: grid;
+    grid-template-columns: 52px 52px 52px 52px 52px 52px 52px 52px 52px 52px;
+}
+
+.bloco {
+    width: 50px;
+    height: 50px;
+    text-align: center;
+    line-height: 300%;
+}
+
+.jogador {
+    background-image: url("../images/sapo.png");
+}
+
+.azul {
+    background-color: blue;
+    border: 1px solid transparent;
+    color: white;
+}
+
+.amarelo {
+    background-color: yellow;
+    border: 1px solid transparent;
+    color: white;
+}
+
+.cinza {
+    background-color: lightgray;
+    border: 1px solid lightgray;
+    color: lightgray;
+}
+
+.vermelho {
+    background-color: red;
+    border: 1px solid transparent;
+    color: yellow;
+}
+
+.cinza:hover {
+    background-color: gray;
+    color:black;
+}
+
+.centro {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.top {
+    border-top: 1px solid red;
+}
+
+.bottom {
+    border-bottom: 1px solid red;
+}
+
+.left {
+    border-left: 1px solid red;
+}
+
+.right {
+    border-right: 1px solid red;
+}
