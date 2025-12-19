@@ -157,7 +157,6 @@ function criaGrid()
             divNovo.classList.add("bloco");
             divNovo.classList.add("cinza");
             divNovo.id = "bloco"+x+y;
-            // divNovo.innerText = ""+x+y;
 
             if (y == 0)
             {
@@ -181,29 +180,58 @@ function criaGrid()
     }
 }
 
+function jogadorEstaNaBalsa(rio, colunaBalsa) {
+    return posicaoX === rio && posicaoY === colunaBalsa;
+}
+
 setInterval(movimentaBalsas, 1000);
 
 function movimentaBalsas()
 {
     rios.forEach((rio, index) => {
-        let balsaAtual = document.querySelector("#bloco"+rio+balsa[index]);
+
+        let colunaAtual = balsa[index];
+        let balsaAtual = document.querySelector("#bloco"+rio+colunaAtual);
+        let jogadorNaBalsa = jogadorEstaNaBalsa(rio, colunaAtual);
+
         if (direcao[index] == 1)
         {
-            balsa[index] += 1;
-            if (balsa[index] == gridSizeY-1)
+            balsa[index]++;
+            if (balsa[index] == gridSizeY - 1)
                 direcao[index] = -1;
         }
         else
         {
-            balsa[index] -= 1;
+            balsa[index]--;
             if (balsa[index] == 0)
                 direcao[index] = 1;
         }
-        let balsaNova = document.querySelector("#bloco"+rio+(balsa[index]));
+
+        let novaColuna = balsa[index];
+        let balsaNova = document.querySelector("#bloco"+rio+novaColuna);
 
         balsaAtual.classList.remove("amarelo");
         balsaAtual.classList.add("azul");
         balsaNova.classList.remove("azul");
         balsaNova.classList.add("amarelo");
+
+        if (jogadorNaBalsa)
+        {
+            let jogadorAtual = document.querySelector("#bloco"+posicaoX+posicaoY);
+
+            if (novaColuna < 0 || novaColuna >= gridSizeY)
+            {
+                jogadorAtual.classList.add("vermelho");
+                removeVida();
+                return;
+            }
+
+            let jogadorNovo = document.querySelector("#bloco"+posicaoX+novaColuna);
+
+            jogadorAtual.classList.remove("jogador");
+            jogadorNovo.classList.add("jogador");
+
+            posicaoY = novaColuna;
+        }
     });
 }
