@@ -1,6 +1,8 @@
 // Variáveis Globais:
 const gridSizeX = 10;
 const gridSizeY = 10;
+const chegadaX = 0;
+const chegadaY = 5;
 
 var posicaoX = 9;
 var posicaoY = 4;
@@ -12,7 +14,7 @@ var balsa = [ 5, 4 ];
 var direcao = [ 1, -1 ];
 
 var estradas = [1, 2, 3];
-var carro = [1, 5, 8];
+var carro = [2, 5, 8];
 var direcaoCarro = [1, -1, 1];
 
 function setDefaults()
@@ -27,6 +29,15 @@ document.addEventListener('DOMContentLoaded', inicializaJogo);
 document.addEventListener('keydown', processaTecla);
 
 // Funções:
+
+function verificaVitoria() {
+    if (posicaoX === chegadaX && posicaoY === chegadaY) {
+        let ambiente = document.querySelector(".ambiente");
+        ambiente.innerHTML = "";
+        alert("🎉 Você venceu!");
+        inicializaJogo();
+    }
+}
 
 function removeVida()
 {
@@ -57,6 +68,7 @@ function processaTecla(evento)
             atual.classList.remove("jogador");
             novaPosicao.classList.add("jogador");
             posicaoX += 1;
+            verificaVitoria();
         }
         else
         {
@@ -72,6 +84,7 @@ function processaTecla(evento)
             atual.classList.remove("jogador");
             novaPosicao.classList.add("jogador");
             posicaoY += 1;
+            verificaVitoria();
         }
         else
         {
@@ -87,6 +100,7 @@ function processaTecla(evento)
             atual.classList.remove("jogador");
             novaPosicao.classList.add("jogador");
             posicaoX -= 1;
+            verificaVitoria();
         }
         else
         {
@@ -103,6 +117,7 @@ function processaTecla(evento)
             atual.classList.remove("jogador");
             novaPosicao.classList.add("jogador");
             posicaoY -= 1;
+            verificaVitoria();
         }
         else
         {
@@ -156,6 +171,10 @@ function inicializaJogo()
                 elem.classList.add("asfalto");
         }
     });
+    
+    let chegada = document.querySelector("#bloco" + chegadaX + chegadaY);
+    chegada.classList.remove("verde");
+    chegada.classList.add("chegada");
 
     atualizaVidas();
 }
