@@ -33,7 +33,6 @@ function removeVida()
     vidas--;
     if (vidas == 0)
     {
-        // TODO: Falta limpar o div "ambiente"
         let ambiente = document.querySelector(".ambiente");
         ambiente.innerHTML = "";
         alert("Game over");
@@ -236,6 +235,7 @@ function movimentaBalsas() {
 
 function movimentaCarros() {
     estradas.forEach((estrada, i) => {
+
         let colAtual = carro[i];
         let cAtual = document.querySelector("#bloco" + estrada + colAtual);
 
@@ -249,9 +249,17 @@ function movimentaCarros() {
 
         cAtual.classList.remove("carro");
         cAtual.classList.add("asfalto");
+
+        if (posicaoX === estrada && posicaoY === colNova) {
+            cNova.classList.add("vermelho");
+            removeVida();
+            return;
+        }
+
         cNova.classList.remove("asfalto");
         cNova.classList.add("carro");
     });
 }
+
 
 
