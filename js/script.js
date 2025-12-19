@@ -7,9 +7,13 @@ var posicaoY = 4;
 
 var vidas = 3;
 
-var rios = [ 1, 3, 6, 8];
-var balsa = [ 2, 4, 6, 8 ];
-var direcao = [ 1, -1, 1, -1 ];
+var rios = [ 6, 8];
+var balsa = [ 5, 4 ];
+var direcao = [ 1, -1 ];
+
+var estradas = [1, 2, 3];
+var carro = [1, 5, 8];
+var direcaoCarro = [1, -1, 1];
 
 function setDefaults()
 {
@@ -49,7 +53,7 @@ function processaTecla(evento)
     if (evento.key == "ArrowDown")
     {
         let novaPosicao = document.querySelector("#bloco"+(posicaoX+1)+posicaoY);
-        if (posicaoX < (gridSizeX-1) && !novaPosicao.classList.contains("azul"))
+        if (posicaoX < (gridSizeX-1) && !novaPosicao.classList.contains("azul") && !novaPosicao.classList.contains("carro"))
         {
             atual.classList.remove("jogador");
             novaPosicao.classList.add("jogador");
@@ -64,7 +68,7 @@ function processaTecla(evento)
     else if (evento.key == "ArrowRight")
     {
         let novaPosicao = document.querySelector("#bloco"+posicaoX+(posicaoY+1));
-        if (posicaoY < (gridSizeY-1) && !novaPosicao.classList.contains("azul"))
+        if (posicaoY < (gridSizeY-1) && !novaPosicao.classList.contains("azul") && !novaPosicao.classList.contains("carro"))
         {
             atual.classList.remove("jogador");
             novaPosicao.classList.add("jogador");
@@ -79,8 +83,7 @@ function processaTecla(evento)
     else if (evento.key == "ArrowUp")
     {
         let novaPosicao = document.querySelector("#bloco"+(posicaoX-1)+posicaoY);
-        // Posso ir para a nova posição?
-        if (posicaoX > 0 && !novaPosicao.classList.contains("azul"))
+        if (posicaoX > 0 && !novaPosicao.classList.contains("azul") && !novaPosicao.classList.contains("carro"))
         {
             atual.classList.remove("jogador");
             novaPosicao.classList.add("jogador");
@@ -96,7 +99,7 @@ function processaTecla(evento)
     else if (evento.key == "ArrowLeft")
     {
         let novaPosicao = document.querySelector("#bloco"+posicaoX+(posicaoY-1));
-        if (posicaoY > 0 && !novaPosicao.classList.contains("azul"))
+        if (posicaoY > 0 && !novaPosicao.classList.contains("azul") && !novaPosicao.classList.contains("carro"))
         {
             atual.classList.remove("jogador");
             novaPosicao.classList.add("jogador");
@@ -134,11 +137,24 @@ function inicializaJogo()
         for(let i = 0; i < gridSizeY; i++)
         {
             let elem = document.querySelector("#bloco"+rio+i);
-            elem.classList.remove("cinza");
+            elem.classList.remove("verde");
             if (balsa[cont_rio] == i)
                 elem.classList.add("amarelo");
             else
                 elem.classList.add("azul");
+        }
+    });
+
+    // Criar estradas
+    estradas.forEach((estrada, cont_estrada) => {
+        for(let i = 0; i < gridSizeY; i++)
+        {
+            let elem = document.querySelector("#bloco"+estrada+i);
+            elem.classList.remove("verde");
+            if (carro[cont_estrada] == i)
+                elem.classList.add("carro");
+            else
+                elem.classList.add("asfalto");
         }
     });
 
@@ -155,7 +171,7 @@ function criaGrid()
         {
             let divNovo = document.createElement("div");
             divNovo.classList.add("bloco");
-            divNovo.classList.add("cinza");
+            divNovo.classList.add("verde");
             divNovo.id = "bloco"+x+y;
 
             if (y == 0)
@@ -185,53 +201,57 @@ function jogadorEstaNaBalsa(rio, colunaBalsa) {
 }
 
 setInterval(movimentaBalsas, 1000);
+setInterval(movimentaCarros, 500);
 
-function movimentaBalsas()
-{
-    rios.forEach((rio, index) => {
 
-        let colunaAtual = balsa[index];
-        let balsaAtual = document.querySelector("#bloco"+rio+colunaAtual);
-        let jogadorNaBalsa = jogadorEstaNaBalsa(rio, colunaAtual);
+function movimentaBalsas() {
+    rios.forEach((rio, i) => {
+        let colAtual = balsa[i];
+        let bAtual = document.querySelector("#bloco" + rio + colAtual);
+        let jogadorNaBalsa = jogadorEstaNaBalsa(rio, colAtual);
 
-        if (direcao[index] == 1)
-        {
-            balsa[index]++;
-            if (balsa[index] == gridSizeY - 1)
-                direcao[index] = -1;
-        }
-        else
-        {
-            balsa[index]--;
-            if (balsa[index] == 0)
-                direcao[index] = 1;
+        balsa[i] += direcao[i];
+        if (balsa[i] === 0 || balsa[i] === gridSizeY - 1) {
+            direcao[i] *= -1;
         }
 
-        let novaColuna = balsa[index];
-        let balsaNova = document.querySelector("#bloco"+rio+novaColuna);
+        let colNova = balsa[i];
+        let bNova = document.querySelector("#bloco" + rio + colNova);
 
-        balsaAtual.classList.remove("amarelo");
-        balsaAtual.classList.add("azul");
-        balsaNova.classList.remove("azul");
-        balsaNova.classList.add("amarelo");
+        bAtual.classList.remove("amarelo");
+        bAtual.classList.add("azul");
+        bNova.classList.remove("azul");
+        bNova.classList.add("amarelo");
 
-        if (jogadorNaBalsa)
-        {
-            let jogadorAtual = document.querySelector("#bloco"+posicaoX+posicaoY);
+        if (jogadorNaBalsa) {
+            let jAtual = document.querySelector("#bloco" + posicaoX + posicaoY);
+            let jNovo = document.querySelector("#bloco" + posicaoX + colNova);
 
-            if (novaColuna < 0 || novaColuna >= gridSizeY)
-            {
-                jogadorAtual.classList.add("vermelho");
-                removeVida();
-                return;
-            }
-
-            let jogadorNovo = document.querySelector("#bloco"+posicaoX+novaColuna);
-
-            jogadorAtual.classList.remove("jogador");
-            jogadorNovo.classList.add("jogador");
-
-            posicaoY = novaColuna;
+            jAtual.classList.remove("jogador");
+            jNovo.classList.add("jogador");
+            posicaoY = colNova;
         }
     });
 }
+
+function movimentaCarros() {
+    estradas.forEach((estrada, i) => {
+        let colAtual = carro[i];
+        let cAtual = document.querySelector("#bloco" + estrada + colAtual);
+
+        carro[i] += direcaoCarro[i];
+        if (carro[i] === 0 || carro[i] === gridSizeY - 1) {
+            direcaoCarro[i] *= -1;
+        }
+
+        let colNova = carro[i];
+        let cNova = document.querySelector("#bloco" + estrada + colNova);
+
+        cAtual.classList.remove("carro");
+        cAtual.classList.add("asfalto");
+        cNova.classList.remove("asfalto");
+        cNova.classList.add("carro");
+    });
+}
+
+
