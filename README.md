@@ -35,3 +35,6 @@ Caso o jogador colida com um carro, caia no rio sem balsa ou tente realizar um m
 - HTML5  
 - CSS3 (Grid Layout)  
 - JavaScript (Vanilla JS)
+
+
+👨‍💻 **Desenvolvido por Juliano Tavares**
