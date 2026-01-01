@@ -27,6 +27,7 @@ O jogador é controlado pelas setas do teclado:
 - ➡️ **Seta para direita**: move o jogador uma posição para a direita
 
 Caso o jogador colida com um carro, caia no rio sem balsa ou tente realizar um movimento inválido, ele perde uma vida.
+
 ---
 
 ## ⚙️ Tecnologias
